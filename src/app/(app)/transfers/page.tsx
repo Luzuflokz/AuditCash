@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
 import { FaArrowRight, FaMoneyBillWave, FaCreditCard, FaPaypal, FaUniversity, FaWallet, FaHandHoldingUsd, FaCoins, FaMobileAlt, FaTrash } from 'react-icons/fa'; // Import FaTrash
 import { useAuth } from '@/context/AuthContext'; // Import useAuth
+import Link from 'next/link';
 
 // --- Types ---
 type Account = {
