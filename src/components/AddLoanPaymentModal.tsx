@@ -9,7 +9,11 @@ type Loan = {
   persona_nombre: string;
   monto: number;
   monto_pagado: number;
+  nota: string | null;
+  cuenta_id: string;
+  created_at: string;
   pagado: boolean;
+  cuentas: { nombre: string };
 };
 
 type Account = {

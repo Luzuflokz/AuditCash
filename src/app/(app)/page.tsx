@@ -68,12 +68,17 @@ const predefinedAccountNames = [
 const INGRESOS_CATEGORIES = ['Salario', 'Inversiones', 'Regalo', 'Ventas', 'Otros Ingresos'];
 const GASTOS_CATEGORIES = ['Alimentos', 'Transporte', 'Vivienda', 'Entretenimiento', 'Servicios', 'Ropa', 'Educación', 'Salud', 'Deudas', 'Otros Gastos'];
 
+type ChartData = {
+  labels: string[];
+  values: number[];
+};
+
 export default function HomePage() {
   const supabase = createClient();
   const { user, loading: authLoading } = useAuth(); // Usar el AuthContext
   const router = useRouter(); // Hook para redirección
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [chartData, setChartData] = useState({ labels: [], values: [] });
+  const [chartData, setChartData] = useState<ChartData>({ labels: [], values: [] });
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [latestMovements, setLatestMovements] = useState<Movement[]>([]);
   const [pageLoading, setPageLoading] = useState(true); // Estado de carga para los datos de la página
@@ -158,7 +163,7 @@ export default function HomePage() {
     }
   }, [user, authLoading, timeRange, router]);
   
-  const handleAddAccount = async (name: string, initialBalance: number) => {
+  const handleAddAccount = async (name: string, initialBalance: number): Promise<void> => {
     if (!user || submissionLock.current) return;
     submissionLock.current = true;
     try {
@@ -171,6 +176,65 @@ export default function HomePage() {
       }
     } finally { submissionLock.current = false; }
   };
+
+  const handleAddMovement = async (data: { accountId: string; amount: number; type: 'ingreso' | 'gasto'; category: string; description: string; date: string; }): Promise<void> => {
+    if (!user || submissionLock.current) return;
+    submissionLock.current = true;
+    try {
+      const { error } = await supabase.from('movimientos').insert({
+        usuario_id: user.id,
+        cuenta_id: data.accountId,
+        monto: data.amount,
+        tipo: data.type,
+        categoria: data.category,
+        descripcion: data.description,
+        fecha: data.date,
+      });
+
+      if (error) {
+        toast.error('Error al registrar movimiento.');
+        console.error(error);
+      } else {
+        toast.success('¡Movimiento registrado con éxito!');
+        await fetchData(user.id, timeRange);
+        setIsAddMovementModalOpen(false);
+      }
+    } finally {
+      submissionLock.current = false;
+    }
+  };
+
+  const handleAddFixedExpense = async (data: {
+    nombre: string;
+    monto: number;
+    dia_pago: number;
+    categoria: string;
+    activo: boolean;
+  }): Promise<void> => {
+    if (!user || submissionLock.current) return;
+    submissionLock.current = true;
+    try {
+      const { error } = await supabase.from('gastos_fijos').insert({
+        usuario_id: user.id,
+        nombre: data.nombre,
+        monto: data.monto,
+        dia_pago: data.dia_pago,
+        categoria: data.categoria,
+        activo: data.activo,
+      });
+
+      if (error) {
+        toast.error('Error al añadir gasto fijo.');
+        console.error(error);
+      } else {
+        toast.success('¡Gasto fijo añadido!');
+        await fetchData(user.id, timeRange);
+        setIsAddFixedExpenseModalOpen(false);
+      }
+    } finally {
+      submissionLock.current = false;
+    }
+  };
   
   const handleDeleteAccount = async (accountId: string) => {
     if (window.confirm('¿Estás seguro que quieres eliminar esta cuenta? Todos los movimientos asociados se eliminarán y esta acción es irreversible.')) {
@@ -182,10 +246,11 @@ export default function HomePage() {
           const { error } = await supabase.from('cuentas').delete().eq('id', accountId);
           if (error) toast.error('Error al eliminar la cuenta.');
           else {
-            toast.success('Cuenta eliminada con éxito.'); 
-            await fetchData(user.id, timeRange); // Re-fetch data after deletion
-          }
-        } finally { submissionLock.current = false; }
+                        toast.success('Cuenta eliminada con éxito.');
+                        if (user) { // Asegurar explícitamente que user no es null
+                          await fetchData(user.id, timeRange); // Re-fetch data after deletion
+                        }
+                      }        } finally { submissionLock.current = false; }
     }
   };
 
@@ -282,7 +347,7 @@ export default function HomePage() {
       <AddMovementModal
         isOpen={isAddMovementModalOpen}
         onClose={() => setIsAddMovementModalOpen(false)}
-        onSave={() => { user && fetchData(user.id, timeRange); setIsAddMovementModalOpen(false); }}
+        onSave={handleAddMovement}
         isSubmitting={submissionLock.current}
         accounts={accounts}
         incomeCategories={INGRESOS_CATEGORIES}
@@ -291,7 +356,7 @@ export default function HomePage() {
       <AddFixedExpenseModal
         isOpen={isAddFixedExpenseModalOpen}
         onClose={() => setIsAddFixedExpenseModalOpen(false)}
-        onSave={() => { user && fetchData(user.id, timeRange); setIsAddFixedExpenseModalOpen(false); }}
+        onSave={handleAddFixedExpense}
         isSubmitting={submissionLock.current}
       />
       <AddTransferModal

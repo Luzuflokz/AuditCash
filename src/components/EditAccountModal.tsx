@@ -12,9 +12,10 @@ type EditAccountModalProps = {
   account: Account | null;
   onClose: () => void;
   onSave: (id: string, name: string, balance: number) => Promise<void>;
+  isSubmitting: boolean;
 };
 
-const EditAccountModal = ({ account, onClose, onSave }: EditAccountModalProps) => {
+const EditAccountModal = ({ account, onClose, onSave, isSubmitting }: EditAccountModalProps) => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState<number | ''>(''); // Permitir cadena vacía para resetear
 
@@ -79,7 +80,7 @@ const EditAccountModal = ({ account, onClose, onSave }: EditAccountModalProps) =
             </button>
             <button 
               type="submit" 
-              disabled={name.trim() === '' || balance === '' || Number(balance) < 0} // Deshabilitar si la validación falla
+              disabled={isSubmitting || name.trim() === '' || balance === '' || Number(balance) < 0} // Deshabilitar si la validación falla
               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
             >
               Guardar Cambios

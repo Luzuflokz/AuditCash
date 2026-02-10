@@ -70,7 +70,7 @@ export default function Login() {
             variables: es
           }}
           // onAuthStateChange ya no es necesario aquí
-          onAuthError={handleAuthError}
+
         />
       </div>
     </div>

@@ -237,9 +237,9 @@ export default function LoansPage() {
                   <LoanCard key={loan.id} loan={loan} onDelete={handleDeleteLoan} onAddPayment={() => { setPayingLoan(loan); setIsPaymentModalOpen(true); }} isSubmitting={isSubmitting} />
                 ))}
                 <div className="flex justify-center items-center gap-4 mt-6">
-                  <button onClick={() => handlePageChange(page - 1)} disabled={page === 0 || loading} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                  <button onClick={() => handlePageChange(page - 1)} disabled={page === 0 || pageLoading} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
                   <span>Página {page + 1}</span>
-                  <button onClick={() => handlePageChange(page + 1)} disabled={!hasMore || loading} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                  <button onClick={() => handlePageChange(page + 1)} disabled={!hasMore || pageLoading} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
                 </div>
               </div>
             )}
