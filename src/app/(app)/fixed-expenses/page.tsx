@@ -6,6 +6,7 @@ import type { User } from '@supabase/supabase-js';
 import toast from 'react-hot-toast';
 import AddFixedExpenseModal from '@/components/AddFixedExpenseModal';
 import EditFixedExpenseModal from '@/components/EditFixedExpenseModal';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 type FixedExpense = {
   id: string;
