@@ -7,7 +7,8 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-
+// No se necesita importar useEffect si no se usa aquí
+// Registrar los elementos de Chart.js una vez a nivel de módulo
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const generateColors = (numColors: number) => {
@@ -30,6 +31,8 @@ type ExpenseChartProps = {
 };
 
 const ExpenseChart = ({ data }: ExpenseChartProps) => {
+    // El useEffect que registraba los elementos se elimina
+
     
     // Usar los colores pasados o generar nuevos si no se proporcionan
     const backgroundColors = data.colors && data.colors.length >= data.values.length 

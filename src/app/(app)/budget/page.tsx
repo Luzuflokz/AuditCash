@@ -8,7 +8,11 @@ import toast from 'react-hot-toast';
 import AddBudgetModal from '@/components/AddBudgetModal';
 import EditBudgetModal from '@/components/EditBudgetModal';
 import { useAuth } from '@/context/AuthContext';
-import ExpenseChart from '@/components/ExpenseChart';
+import dynamic from 'next/dynamic'; // Importar dynamic
+
+// Carga dinámica de ExpenseChart con SSR desactivado
+const DynamicExpenseChart = dynamic(() => import('@/components/ExpenseChart'), { ssr: false });
+
 import { FaUtensils, FaBus, FaHome, FaGrinStars, FaLightbulb, FaTshirt, FaGraduationCap, FaMedkit, FaHandHoldingUsd, FaBox, FaEdit, FaTrash } from 'react-icons/fa';
 
 
@@ -248,7 +252,7 @@ export default function BudgetPage() {
                     <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Distribución del Saldo</h2>
                     <p className="text-center text-gray-600">Total: {new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalBalance)}</p>
                     {chartData.values.length > 1 ? (
-                        <ExpenseChart data={chartData} />
+                        <DynamicExpenseChart data={chartData} />
                     ) : <p className="text-center text-gray-500 mt-4">No hay suficientes datos para el gráfico.</p>}
                 </div>
                  <div className="bg-white p-6 rounded-2xl shadow-lg">

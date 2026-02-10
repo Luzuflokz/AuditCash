@@ -12,7 +12,10 @@ import AddAccountModal from '@/components/AddAccountModal';
 import AddMovementModal from '@/components/AddMovementModal'; // Nuevo modal
 import AddFixedExpenseModal from '@/components/AddFixedExpenseModal'; // Nuevo modal
 import AddTransferModal from '@/components/AddTransferModal'; // Modal para transferencias
-import ExpenseChart from '@/components/ExpenseChart';
+import dynamic from 'next/dynamic'; // Importar dynamic
+
+// Carga dinámica de ExpenseChart con SSR desactivado
+const DynamicExpenseChart = dynamic(() => import('@/components/ExpenseChart'), { ssr: false });
 
 import { FaMoneyBillWave, FaCreditCard, FaPaypal, FaUniversity, FaWallet, FaHandHoldingUsd, FaCoins, FaMobileAlt, FaSearchPlus, FaEye, FaEyeSlash, FaEdit, FaTrashAlt, FaPlus, FaTimes, FaExchangeAlt, FaFileInvoiceDollar } from 'react-icons/fa'; // Se añaden FaPlus, FaTimes y otros
 
@@ -92,7 +95,7 @@ export default function HomePage() {
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 
   // UI State
-  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+  const [isBalanceVisible, setIsBalanceVisible] = useState(false);
   const [timeRange, setTimeRange] = useState<'30-days' | 'this-month' | '90-days'>('30-days');
   const [isFabMenuOpen, setIsFabMenuOpen] = useState(false);
 
@@ -453,7 +456,7 @@ export default function HomePage() {
             </div>
             {chartData.values.length > 0 ? (
                 <div className="w-full max-w-sm mx-auto">
-                    <ExpenseChart data={chartData} />
+                    <DynamicExpenseChart data={chartData} />
                     <p className="text-center text-2xl font-bold text-gray-800 mt-4">Total: {new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalExpenses)}</p>
                 </div>
             ) : <p className="text-center text-gray-500 py-8">No hay datos de gastos para mostrar.</p>}

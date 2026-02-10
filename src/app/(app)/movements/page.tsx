@@ -241,7 +241,7 @@ export default function MovementsPage() {
         <h1 className="text-2xl font-bold text-gray-800 mb-8">Historial de Movimientos</h1>
         
         {/* Sección de Filtros */}
-        <div className="bg-white p-4 rounded-lg shadow-md mb-6 flex flex-wrap gap-4 items-end">
+        <div className="bg-white p-4 rounded-lg shadow-md mb-6 grid grid-cols-2 gap-4 md:flex md:flex-wrap md:gap-4 md:items-end">
           <div>
             <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Desde:</label>
             <input 

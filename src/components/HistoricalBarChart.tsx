@@ -10,7 +10,9 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+// No se necesita importar useEffect si no se usa aquí
 
+// Registrar los elementos de Chart.js una vez a nivel de módulo
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,18 +22,10 @@ ChartJS.register(
   Legend
 );
 
-interface HistoricalDataPoint {
-  label: string;
-  income: number;
-  expenses: number;
-}
-
-interface HistoricalBarChartProps {
-  data: HistoricalDataPoint[];
-  title: string;
-}
+// ... (resto del código del componente) ...
 
 const HistoricalBarChart = ({ data, title }: HistoricalBarChartProps) => {
+  // El useEffect que registraba los elementos se elimina
   const labels = data.map(dp => dp.label);
   const incomeData = data.map(dp => dp.income);
   const expensesData = data.map(dp => dp.expenses);
