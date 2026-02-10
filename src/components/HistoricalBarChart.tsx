@@ -22,6 +22,17 @@ ChartJS.register(
   Legend
 );
 
+interface HistoricalDataPoint {
+  label: string;
+  income: number;
+  expenses: number;
+}
+
+interface HistoricalBarChartProps {
+  data: HistoricalDataPoint[];
+  title: string;
+}
+
 // ... (resto del código del componente) ...
 
 const HistoricalBarChart = ({ data, title }: HistoricalBarChartProps) => {
