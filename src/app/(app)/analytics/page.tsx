@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import type { User } from '@supabase/supabase-js';
 import toast from 'react-hot-toast';
 import dynamic from 'next/dynamic'; // Importar dynamic
+import { FaFilter } from 'react-icons/fa';
 
 // Carga dinámica de ExpenseChart con SSR desactivado
 const DynamicExpenseChart = dynamic(() => import('@/components/ExpenseChart'), { ssr: false });
@@ -55,6 +56,7 @@ export default function AnalyticsPage() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [filterPeriod, setFilterPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     if (isClient) { // Solo ejecutar en el cliente
@@ -247,24 +249,34 @@ export default function AnalyticsPage() {
 
   
   return (
-    <div className="p-4 overflow-x-hidden">
-      <h1 className="text-2xl font-bold text-gray-800 mb-8">Análisis de Gastos</h1>
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold text-gray-800">Análisis de Gastos</h1>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="px-4 py-2 bg-blue-600 text-gray-100 rounded-md hover:bg-blue-800 transition-colors cursor-pointer flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white-400 focus:ring-offset-2"
+          title="Mostrar/Ocultar Filtros"
+        >
+          <FaFilter /> {showFilters ? 'Filtros' : 'Filtros'}
+        </button>
+      </div>
 
-      {/* Filter Section */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-8 grid grid-cols-2 gap-4 md:flex md:flex-wrap md:items-end">
-          <div>
+      {showFilters && (
+        <div className="bg-white p-4 rounded-lg shadow-md mb-4 flex flex-col gap-4 md:grid md:grid-cols-2 lg:flex lg:flex-row lg:flex-wrap lg:gap-4 lg:items-end">
+          <div className="w-full md:w-auto md:flex-1">
             <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Desde:</label>
-            <input type="date" id="startDate" value={startDate} onChange={e => setStartDate(e.target.value)} className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"/>
+            <input type="date" id="startDate" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"/>
           </div>
-          <div>
+          <div className="w-full md:w-auto md:flex-1">
             <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">Hasta:</label>
-            <input type="date" id="endDate" value={endDate} onChange={e => setEndDate(e.target.value)} className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"/>
+            <input type="date" id="endDate" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"/>
           </div>
-          <div>
-            <label htmlFor="filterButton" className="block text-sm font-medium text-gray-700 mb-1 invisible">Filtrar</label>
-            <button onClick={handleDateChange} className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition-colors cursor-pointer">Filtrar</button>
+          <div className="w-full md:w-auto md:flex-1">
+            <label htmlFor="filterButton" className="block text-sm font-medium text-gray-700 invisible">Filtrar</label>
+            <button onClick={handleDateChange} className="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition-colors cursor-pointer">Filtrar</button>
           </div>
       </div>
+        )}
 
       {authLoading || pageLoading ? (
         <div className="p-4 animate-pulse">
@@ -283,18 +295,18 @@ export default function AnalyticsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div className="bg-gray-200 p-6 rounded-2xl shadow-lg h-72">
                     <div className="h-6 bg-gray-300 rounded w-1/2 mx-auto mb-4"></div>
-                    <div className="h-48 bg-gray-300 rounded-lg w-full max-w-sm mx-auto"></div>
+                    <div className="h-48 bg-gray-300 rounded-lg w-full"></div>
                 </div>
                 <div className="bg-gray-200 p-6 rounded-2xl shadow-lg h-72">
                     <div className="h-6 bg-gray-300 rounded w-1/2 mx-auto mb-4"></div>
-                    <div className="h-48 bg-gray-300 rounded-lg w-full max-w-sm mx-auto"></div>
+                    <div className="h-48 bg-gray-300 rounded-lg w-full"></div>
                 </div>
             </div>
 
             {/* Skeleton para Histórico */}
             <div className="bg-gray-200 p-6 rounded-2xl shadow-lg mb-8 h-72">
                 <div className="h-6 bg-gray-300 rounded w-1/2 mx-auto mb-4"></div>
-                <div className="h-48 bg-gray-300 rounded-lg w-full max-w-lg mx-auto"></div>
+                <div className="h-48 bg-gray-300 rounded-lg w-full"></div>
             </div>
 
             {/* Skeleton para Filtros Históricos */}
@@ -320,8 +332,8 @@ export default function AnalyticsPage() {
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 {/* Expense Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg">
-                    <h2 className="text-xl font-bold text-gray-800 text-center mb-4">Gastos por Categoría</h2>
+                <div className="bg-white p-0 rounded-2xl shadow-lg">
+                    <h2 className="text-xl font-bold text-gray-800 text-center pt-3 px-3">Gastos por Categoría</h2>
                     {chartData.values.length > 0 ? (
                         <DynamicExpenseChart data={chartData} />
                     ) : <p className="text-center text-gray-500 py-8">No hay datos de gastos en este rango de fechas.</p>}
@@ -329,33 +341,35 @@ export default function AnalyticsPage() {
                 </div>
 
                 {/* Income Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg">
+                <div className="bg-white p-0 rounded-2xl shadow-lg">
                     <h2 className="text-xl font-bold text-gray-800 text-center mb-4">Ingresos por Categoría</h2>
                     {incomeChartData.values.length > 0 ? (
                         <DynamicExpenseChart data={incomeChartData} />
                     ) : <p className="text-center text-gray-500 py-8">No hay datos de ingresos en este rango de fechas.</p>}
-                    <p className="text-2xl font-bold text-gray-800 text-center mt-4">Total de Ingresos: {new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalIncome)}</p>
+                    <p className=" font-bold text-gray-800 text-center mt-4">Total de Ingresos: {new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalIncome)}</p>
                 </div>
             </div>
 
             {/* Historical Bar Chart Section */}
-            <div className="bg-white p-6 rounded-2xl shadow-lg mb-8">
-                <h2 className="text-xl font-bold text-gray-800 text-center mb-4">Ingresos vs Egresos Históricos</h2>
+            <div className="bg-white p-0 rounded-2xl shadow-lg mb-8 p-4">
+                <h2 className="text-xl font-bold text-gray-800 text-center">Ingresos vs Egresos Históricos</h2>
                 {formattedHistoricalData.length > 0 ? (
                     <DynamicHistoricalBarChart data={formattedHistoricalData} title="" />
                 ) : <p className="text-center text-gray-500 py-8">No hay datos históricos disponibles.</p>}
-            </div>
 
+                
             {/* Historical Data Filter */}
-            <div className="bg-white p-4 rounded-lg shadow-md mb-8 flex flex-wrap gap-2 md:flex-row md:items-center">
-                <h2 className="text-base font-semibold text-gray-700">Histórico por:</h2>
+            <div className=" rounded-lg shadow-md mb-8 flex flex-wrap justify-center items-center gap-2">                
                 <button onClick={() => setFilterPeriod('daily')} className={`px-4 py-2 text-sm rounded-full cursor-pointer transition-colors ${filterPeriod === 'daily' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Día</button>
                 <button onClick={() => setFilterPeriod('weekly')} className={`px-4 py-2 text-sm rounded-full cursor-pointer transition-colors ${filterPeriod === 'weekly' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Semana</button>
                 <button onClick={() => setFilterPeriod('monthly')} className={`px-4 py-2 text-sm rounded-full cursor-pointer transition-colors ${filterPeriod === 'monthly' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Mes</button>
             </div>
+            </div>
+
+
 
             {/* Details Table */}
-            <div className="bg-white p-6 rounded-lg shadow-lg mt-5">
+            <div className="bg-white p-4 rounded-lg shadow-lg mt-5">
                 <h2 className="text-gray-700 text-center mb-4 text-xl font-bold">Detalle de Movimientos ({movements.length} gastos)</h2>
                 {movements.length > 0 ? (
                     <div className="max-h-[400px] overflow-y-auto">

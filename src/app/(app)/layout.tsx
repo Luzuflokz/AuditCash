@@ -31,7 +31,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       
-      <main className="flex-1 p-5 transition-all duration-300 md:ml-60 min-h-screen">
+      <main className="flex-1 p-4 md:p-5 transition-all duration-300 lg:ml-60 min-h-screen">
         {children}
       </main>
     </div>

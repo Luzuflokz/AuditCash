@@ -51,6 +51,7 @@ export default function MovementsPage() {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [filterType, setFilterType] = useState<'all' | 'ingreso' | 'gasto'>('all');
+  const [showFilters, setShowFilters] = useState(false);
   
   const fetchMovements = async (
     userId: string, 
@@ -238,51 +239,60 @@ export default function MovementsPage() {
       />
 
       <div className="p-4">
-        <h1 className="text-2xl font-bold text-gray-800 mb-8">Historial de Movimientos</h1>
+                <div className="flex justify-between items-center mb-8">
+                  <h1 className="text-2xl font-bold text-gray-800">Historial de Movimientos</h1>
+                  <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="px-4 py-2 bg-blue-600 text-gray-100 rounded-md hover:bg-blue-00 transition-colors cursor-pointer flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white-400 focus:ring-offset-2"
+                    title="Mostrar/Ocultar Filtros"
+                  >
+                    <FaFilter /> {showFilters ? ' Filtros' : ' Filtros'}
+                  </button>
+                </div>
         
-        {/* Sección de Filtros */}
-        <div className="bg-white p-4 rounded-lg shadow-md mb-6 grid grid-cols-2 gap-4 md:flex md:flex-wrap md:gap-4 md:items-end">
-          <div>
-            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Desde:</label>
-            <input 
-              type="date" 
-              id="startDate" 
-              value={startDate} 
-              onChange={(e) => setStartDate(e.target.value)} 
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
-            />
-          </div>
-          <div>
-            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">Hasta:</label>
-            <input 
-              type="date" 
-              id="endDate" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)} 
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
-            />
-          </div>
-          <div>
-            <label htmlFor="filterType" className="block text-sm font-medium text-gray-700 mb-1">Tipo:</label>
-            <select 
-              id="filterType" 
-              value={filterType} 
-              onChange={(e) => setFilterType(e.target.value as 'all' | 'ingreso' | 'gasto')} 
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
-            >
-              <option value="all">Todos</option>
-              <option value="ingreso">Ingresos</option>
-              <option value="gasto">Gastos</option>
-            </select>
-          </div>
-          <button 
-            onClick={applyFilters} 
-            className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition-colors cursor-pointer flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            <FaFilter /> Aplicar Filtros
-          </button>
-        </div>
-
+                {showFilters && (
+                  <div className="bg-white p-4 rounded-lg shadow-md mb-4 flex flex-col gap-4 md:grid md:grid-cols-2 lg:flex lg:flex-row lg:flex-wrap lg:gap-4 lg:items-end">
+                    <div>
+                      <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Desde:</label>
+                      <input
+                        type="date"
+                        id="startDate"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="px-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">Hasta:</label>
+                      <input
+                        type="date"
+                        id="endDate"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="filterType" className="block text-sm font-medium text-gray-700 mb-1">Tipo:</label>
+                      <select
+                        id="filterType"
+                        value={filterType}
+                        onChange={(e) => setFilterType(e.target.value as 'all' | 'ingreso' | 'gasto')}
+                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                      >
+                        <option value="all">Todos</option>
+                        <option value="ingreso">Ingresos</option>
+                        <option value="gasto">Gastos</option>
+                      </select>
+                    </div>
+                    <button
+                      onClick={applyFilters}
+                      className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition-colors cursor-pointer flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                      <FaFilter /> Aplicar
+                    </button>
+                  </div>
+                )}
         {loading ? (
           <div className="p-4 animate-pulse">
             {/* Skeleton para la sección de Filtros */}
