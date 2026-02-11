@@ -370,11 +370,11 @@ export default function HomePage() {
         accounts={accounts}
       />
 
-      <div className="p-4">
+      <div className="p-2 sm:p-4">
         <h1 className="text-2xl font-bold text-gray-800 mb-8">Inicio</h1>
         
         {/* Tarjeta de Saldo Total */}
-        <div className="relative text-white p-6 rounded-2xl shadow-xl mb-8" style={{ background: 'linear-gradient(to right, #4f46e5, #7c3aed)'}}>
+        <div className="relative text-white p-2 sm:p-6 rounded-2xl shadow-xl mb-8" style={{ background: 'linear-gradient(to right, #4f46e5, #7c3aed)'}}>
             <div className="flex justify-between items-start">
                 <div>
                     <h2 className="text-lg font-normal opacity-80">Saldo Total</h2>
@@ -382,8 +382,8 @@ export default function HomePage() {
                         {isBalanceVisible ? new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalBalance) : 'S/ ****.**'}
                     </p>
                 </div>
-                <button onClick={() => setIsBalanceVisible(!isBalanceVisible)} className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors cursor-pointer">
-                    {isBalanceVisible ? <FaEyeSlash /> : <FaEye />}
+                <button onClick={() => setIsBalanceVisible(!isBalanceVisible)} className="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30 transition-colors cursor-pointer">
+                    {isBalanceVisible ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
                 </button>
             </div>
         </div>
@@ -396,11 +396,11 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           {accounts.map(account => (
-            <div key={account.id} className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-between border-l-4" style={{ borderColor: account.color_hex || '#6B7280' }}>
-                <div className="flex justify-between items-start">
+            <div key={account.id} className="bg-white rounded-xl shadow-md p-2 sm:p-4 flex flex-col justify-between border-l-4" style={{ borderColor: account.color_hex || '#6B7280' }}>
+                <div className="flex flex-wrap justify-between items-start">
                     <div>
-                        <p className="font-bold text-gray-800">{account.nombre}</p>
-                        <p className="text-xl font-semibold text-gray-600 mt-1">{new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(account.saldo_actual)}</p>
+                        <p className="font-bold text-gray-800 break-words">{account.nombre}</p>
+                        <p className="text-xl font-semibold text-gray-600 mt-1 break-words">{new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(account.saldo_actual)}</p>
                     </div>
                     <div className="text-gray-300 opacity-50">
                         {getIconComponentForAccount(account.nombre)}
@@ -423,12 +423,12 @@ export default function HomePage() {
 
 
         {/* Tarjeta de Gráfico de Gastos */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg mb-8 relative">
+        <div className="bg-white p-6 sm:p-6 rounded-2xl shadow-lg mb-8 relative">
             <Link href="/analytics" className="absolute top-4 right-4 text-gray-500 hover:text-indigo-600 transition-colors cursor-pointer">
                 <FaSearchPlus size={20} />
             </Link>
             <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Estructura de Gastos</h2>
-            <div className="flex justify-center gap-2 mb-4">
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
                 <button 
                     onClick={() => setTimeRange('30-days')} 
                     className={`px-3 py-1 text-sm rounded-full cursor-pointer transition-colors ${
@@ -455,7 +455,7 @@ export default function HomePage() {
                 </button>
             </div>
             {chartData.values.length > 0 ? (
-                <div className="w-full max-w-sm mx-auto">
+                <div className="w-full max-w-full mx-auto">
                     <DynamicExpenseChart data={chartData} />
                     <p className="text-center text-2xl font-bold text-gray-800 mt-4">Total: {new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalExpenses)}</p>
                 </div>

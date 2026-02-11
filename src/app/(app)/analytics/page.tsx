@@ -334,20 +334,25 @@ export default function AnalyticsPage() {
                 {/* Expense Chart */}
                 <div className="bg-white p-0 rounded-2xl shadow-lg">
                     <h2 className="text-xl font-bold text-gray-800 text-center pt-3 px-3">Gastos por Categoría</h2>
-                    {chartData.values.length > 0 ? (
+                    <div className="py-3 px-15">
+                        {chartData.values.length > 0 ? (
                         <DynamicExpenseChart data={chartData} />
                     ) : <p className="text-center text-gray-500 py-8">No hay datos de gastos en este rango de fechas.</p>}
                     <p style={{fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center', marginTop: '15px'}}>Total de Gastos: {new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalExpenses)}</p>
+                </div>
                 </div>
 
                 {/* Income Chart */}
                 <div className="bg-white p-0 rounded-2xl shadow-lg">
                     <h2 className="text-xl font-bold text-gray-800 text-center mb-4">Ingresos por Categoría</h2>
+                    <div className='py-3 px-15'>
                     {incomeChartData.values.length > 0 ? (
                         <DynamicExpenseChart data={incomeChartData} />
                     ) : <p className="text-center text-gray-500 py-8">No hay datos de ingresos en este rango de fechas.</p>}
                     <p className=" font-bold text-gray-800 text-center mt-4">Total de Ingresos: {new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(totalIncome)}</p>
                 </div>
+                </div>
+
             </div>
 
             {/* Historical Bar Chart Section */}

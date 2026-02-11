@@ -57,7 +57,7 @@ const ExpenseChart = ({ data }: ExpenseChartProps) => {
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'right' as const,
+                position: 'bottom' as const,
                 labels: {
                     boxWidth: 20,
                     padding: 20,
@@ -99,7 +99,7 @@ const ExpenseChart = ({ data }: ExpenseChartProps) => {
     };
 
     return (
-        <div style={{ position: 'relative', height: '300px', width: '300px', margin: 'auto' }}>
+        <div style={{ position: 'relative' }} className="w-64 h-64 mx-auto">
             <Doughnut data={chartData} options={chartOptions} />
         </div>
     );
